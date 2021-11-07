@@ -37,21 +37,63 @@ namespace PasswordCracker
         
         static void Main(string[] args)
         {
-            string[] hashedPasswords = File.ReadAllLines("passwords_hashed.txt");
-
-            Console.WriteLine("MD5 Password Cracker v1.0");
+            int dip = 0;
+            string[] validate = File.ReadAllLines("passwords_validate.txt");
+            Dictionary<string, int > dictionary = new Dictionary<string, int>();
             
-            foreach (var pass in hashedPasswords)
+            Console.WriteLine("MD5 Password Cracker v1.0");
+            string[] letters =
             {
-                Console.WriteLine(pass);
+                "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u",
+                "v", "w", "x", "y", "z"
+            };
+
+            
+            for (int a = 0; a < 26; a++)
+            {
+                for (int b = 0; b < 26; b++)
+                {
+                    for (int c = 0; c < 26; c++)
+                    {
+                        for (int d = 0; d < 26; d++)
+                        {
+                            for (int e = 0; e < 26; e++)
+                            {
+                                StringBuilder str = new StringBuilder(" ");
+                                str.Append(letters[a]);
+                                str.Append(letters[b]);
+                                str.Append(letters[c]);
+                                str.Append(letters[d]);
+                                str.Append(letters[e]);
+                                
+                                String st = str.ToString();
+                                dictionary.Add(md5(st), dip);
+                                Console.WriteLine(st);
+                                dip++;
+                            }
+                        }
+                    }
+                }
+            }
+            foreach (var pass in validate)
+            {
+                if (dictionary.ContainsKey(pass))
+                {
+                    Console.WriteLine("True");
+                }
+                else
+                {
+                    Console.WriteLine("False");
+                }
+                
             }
 
             // Use this method to test if you managed to correctly crack all the passwords
             // Note that hashedPasswords will need to be swapped out with an array the exact
             // same length that contains all the cracked passwords
-            bool passwordsValidated = Validator.ValidateResults(hashedPasswords);
+            bool passwordsValidated = Validator.ValidateResults(validate);
             
-            Console.WriteLine($"\nPasswords successfully cracked: {passwordsValidated}");
+            Console.WriteLine($"\nPasswords successfully cracked: {passwordsValidated}");  
         }
     }
 }
